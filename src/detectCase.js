@@ -25,7 +25,7 @@ function detectCase(req) {
     }
   }
 
-  return { ok: false, data: { errors: en.erEn.NOT_SUPPORTED_CASE } };
+  return { ok: false, data: [{ message: en.erEn.NOT_SUPPORTED_CASE }] };
 }
 
 module.exports = { detectCase };
