@@ -1,69 +1,21 @@
 const en = require('./enums');
 
-const isLetter = (letter) => letter.toUpperCase() !== letter.toLowerCase();
-const isSeparator = (sym) => /[ _-]/.test(sym);
-
-const lcTransform = (text, sep) => {
-  let res = '';
-
-  for (const ch of text) {
-    if (isLetter(ch)) {
-      res += ch.toLowerCase();
-
-      continue;
-    }
-
-    if (isSeparator(ch)) {
-      res += sep;
-
-      continue;
-    }
-
-    res += ch;
-  }
-
-  return res;
-};
+const capitalize = (word) =>
+  word[0].toUpperCase() + word.slice(1).toLowerCase();
 
 const camelLike = (text, firstUpper) => {
-  let res = '';
-  let makeUpper = firstUpper;
+  const first = firstUpper ? capitalize(text[0]) : text[0].toLowerCase();
+  const rest = text.slice(1).map((w) => capitalize(w));
 
-  for (const ch of text) {
-    if (isSeparator(ch)) {
-      makeUpper = true;
-      continue;
-    }
-
-    if (isLetter(ch)) {
-      if (makeUpper) {
-        res += ch.toUpperCase();
-        makeUpper = false;
-      } else {
-        res += ch.toLowerCase();
-      }
-      continue;
-    }
-
-    res += ch;
-    makeUpper = false;
-  }
-
-  return res;
-};
-
-const ucTransform = (text) => {
-  const pre = lcTransform(text, '_');
-
-  return pre.toUpperCase();
+  return [first, ...rest].join('');
 };
 
 const convert = {
-  [en.casesEn.SNAKE]: (text) => lcTransform(text, '_'),
-  [en.casesEn.KEBAB]: (text) => lcTransform(text, '-'),
+  [en.casesEn.SNAKE]: (text) => text.map((w) => w.toLowerCase()).join('_'),
+  [en.casesEn.KEBAB]: (text) => text.map((w) => w.toLowerCase()).join('-'),
   [en.casesEn.CAMEL]: (text) => camelLike(text, false),
   [en.casesEn.PASCAL]: (text) => camelLike(text, true),
-  [en.casesEn.UPPER]: (text) => ucTransform(text),
+  [en.casesEn.UPPER]: (text) => text.map((w) => w.toUpperCase()).join('_'),
 };
 
 module.exports = { convert };

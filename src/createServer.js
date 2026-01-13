@@ -1,6 +1,7 @@
 const http = require('http');
 const v = require('./validateRequest');
 const c = require('./convert');
+const n = require('./normalize');
 const PORT = process.env.PORT || 5700;
 
 function createServer() {
@@ -21,12 +22,13 @@ function createServer() {
     }
 
     const { originalCase, targetCase, originalText } = validated.data;
+    const normToTransform = n.normalize[originalCase](originalText);
 
     const response = {
       originalCase,
       targetCase,
       originalText,
-      convertedText: c.convert[targetCase](originalText),
+      convertedText: c.convert[targetCase](normToTransform),
     };
 
     res.statusCode = 200;
