@@ -5,27 +5,27 @@ function detectCase(req) {
 
   if (isLowerCase) {
     if (/^[a-z0-9]+(_[a-z0-9]+)*$/.test(req)) {
-      return { originalCase: en.casesEn.SNAKE };
+      return { ok: true, originalCase: en.casesEn.SNAKE };
     }
 
     if (/^[a-z0-9]+(-[a-z0-9]+)*$/.test(req)) {
-      return { originalCase: en.casesEn.KEBAB };
+      return { ok: true, originalCase: en.casesEn.KEBAB };
     }
   } else {
     if (/^[a-z]+(?:[A-Z][a-z0-9]*)*$/.test(req)) {
-      return { originalCase: en.casesEn.CAMEL };
+      return { ok: true, originalCase: en.casesEn.CAMEL };
     }
 
     if (/^[A-Z][a-z0-9]*(?:[A-Z][a-z0-9]*)*$/.test(req)) {
-      return { originalCase: en.casesEn.PASCAL };
+      return { ok: true, originalCase: en.casesEn.PASCAL };
     }
 
     if (/^[A-Z0-9]+(_[A-Z0-9]+)*$/.test(req)) {
-      return { originalCase: en.casesEn.UPPER };
+      return { ok: true, originalCase: en.casesEn.UPPER };
     }
   }
 
-  return { originalCase: null };
+  return { ok: false, data: { errors: en.erEn.NOT_SUPPORTED_CASE } };
 }
 
 module.exports = { detectCase };

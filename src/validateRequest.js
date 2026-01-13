@@ -18,16 +18,22 @@ function validateRequest(req) {
     errors.push({ message: en.erEn.NOT_SUPPORTED_CASE });
   }
 
-  return errors.length !== 0
-    ? { ok: false, data: errors }
-    : {
+  if (errors.length !== 0) {
+    return { ok: false, data: errors };
+  }
+
+  const res = dc.detectCase(reqPhrase);
+
+  return res.ok
+    ? {
       ok: true,
       data: {
-        ...dc.detectCase(reqPhrase),
+        originalCase: res.originalCase,
         targetCase: reqCase,
         originalText: reqPhrase,
       },
-    };
+    }
+    : res;
 }
 
 module.exports = { validateRequest };
